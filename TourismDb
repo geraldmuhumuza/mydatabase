@@ -1,0 +1,175 @@
+CREATE DATABASE IF NOT EXISTS tourism_database;
+USE tourism_database;
+
+CREATE TABLE IF NOT EXISTS tour (
+  tourid INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  tourname VARCHAR(45) NULL,
+  destination VARCHAR(45) NULL,
+  price DECIMAL(4,2) NULL);
+
+INSERT INTO tour(tourname,destination,price) VALUES
+  ("kilimanjoro","Mountain Kilimanjaro",200.1),
+  ("Rwenzori","Mountain Rwenzori",250.1),
+  ("Queen Elizabeth","Queen Elizabeth NP",253.0),
+  ("kidepo","kidepo NP",250.1),
+  ("Murchison","Murchison NP",257.6),
+  ("Bwindi","Bwindi NP",257.9),
+  ("Moroto","Mountain Moroto",250.1),
+  ("Muhavura","Mountain Muhavura",250.1),
+  ("Mgahinga","Mgahinga NP",257.2),
+  ("Lake Mburo","Lake Mburo NP",251.1);
+  
+
+CREATE TABLE IF NOT EXISTS driver (
+  driverid PRIMARY KEY INT NOT NULL AUTO_INCREMENT,
+  firstname VARCHAR(45) NULL,
+  lastname VARCHAR(45) NULL,
+  dateofbirth DATE NULL,
+  contact VARCHAR(45) NULL,
+  email VARCHAR(45) NULL,
+  licencenumber VARCHAR(45) NULL);
+
+INSERT INTO driver(firstname,lastname,dateofbirth,contact,email,licencenumber) VALUES
+  ("Agaba","Nelson","1991-01-23","+256717627382","agaban12@gmail.com","ACE123L"),
+  ("Nduhukire","Michael","1989-04-29","0789243567","michaeln@gmail.com","ABE234N"),
+  ("musiimenta","Annet","1992-09-21","0729345974","annetm@gmail.com","ANX1234P"),
+  ("Opio","Andrew","2000-12-23","07629378273","opioandrew@gmail.com","Aze1783K"),
+  ("Audrey","Twishimwe","1981-11-21","+256728374922","twishimwe@gmail.com","ABX1256b"),
+  ("Mary","Jean","1999-02-19","0753472337","jeanm@gmail.com","ABD4756Q"),
+  ("Augustine","Mpaka","1996-04-10","07678337464","mpakaa@gmail.com","AFG1900L"),
+  ("Billy","Timothy","1989-12-28","0789654534","billytimo@gmail.com","BGH1789Y"),
+  ("Hakim","Abdul","1994-10-18","0768967835","abdulhakimi@gmail.com","BMG5634H"),
+  ("Twagirayesu","John","1995-02-19","+256737458324","johnt@gmail.com","MNB7649P");
+
+CREATE TABLE IF NOT EXISTS vehicle (
+  licencenumber VARCHAR(10) NOT NULL,
+  tour_tourid INT NOT NULL,
+  driverid INT NOT NULL,
+  FOREIGN KEY(tour_tourid) REFERENCES tour(tourid),
+  FOREIGN KEY(driver_id) REFERENCES driver(driverid));
+
+INSERT INTO vehicle(licencenumber,tour_tourid,diverid) VALUES
+  ("UBP987Y",1,2),
+  ("UAE118K",2,4),
+  ("UAP564H",3,6),
+  ("UAM990Q",4,8),
+  ("UAB879H",5,9),
+  ("UAD456H",6,10),
+  ("UAV233V",7,1),
+  ("UAM765J",8,3),
+  ("UAX839G",9,5),
+  ("UAD678F",10,7);
+
+CREATE TABLE IF NOT EXISTS country (
+  countryid INT(3) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  countryName VARCHAR(45) NULL UNIQUE,
+  continent VARCHAR(45) NULL);
+
+INSERT INTO country(countryName,continent) VALUES
+  ("UGANDA","AFRICA"),
+  ("KENYA","AFRICA"),
+  ("ENGLAND","EUROPE"),
+  ("INDIA","ASIA"),
+  ("SOUTHAFRICA","AFRICA"),
+  ("MEXICO","NORTH AMERICA"),
+  ("CHINA","ASIA"),
+  ("MADAGASCAR","AFRICA"),
+  ("MALAWI","AFRICA"),
+  ("TANZANIA","AFRICA");
+
+CREATE TABLE IF NOT EXISTS city (
+  cityid INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  cityname VARCHAR(45) NULL,
+  countryid INT(3) NOT NULL,
+  FOREIGN KEY(countryid) REFERENCES country(countryid));
+
+INSERT INTO city(cityname,countryid) VALUES
+  ("KAMPALA",1),
+  ("MBARARA",1),
+  ("NAIROBI",2),
+  ("LONDON",3),
+  ("MANCHESTER",3),
+  ("DARESALAM",10),
+  ("SHANGHAI",7);
+  
+
+CREATE TABLE IF NOT EXISTS Hotel (
+  idHotel INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  HotelName VARCHAR(45) NOT NULL UNIQUE,
+  cityid INT NOT NULL,
+  FOREIGN KEY(cityid) REFERENCES city(cityid));
+
+INSERT INTO Hotel(HotelName,cityid) VALUES
+  ("TRIANGLE",2),
+  ("SERENA",1),
+  ("MUNYONYO",1),
+  ("NAIROBI HOTEL",3),
+  ("ACACIA",2),
+  ("LAKE VIEW",2);
+  
+CREATE TABLE IF NOT EXISTS Room (
+  idRoom INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  RoomName VARCHAR(45) NULL,
+  Price DECIMAL(2,2) NULL,
+  idHotel INT NOT NULL,
+  FOREIGN KEY(idHotel) REFERENCES Hotel(idHotel));
+
+INSERT INTO Room(RoomName,Price,idHotel) VALUES
+  ("R001",23.3,1),
+  ("R002",24.2,2),
+  ("R003",24.2,2),
+  ("R004",24.2,2),
+  ("R005",24.2,2),
+  ("R006",24.2,2),
+  ("R007",24.2,2),
+  ("R008",24.2,2),
+  ("R009",24.2,2),
+  ("R0010",24.2,2),
+
+CREATE TABLE IF NOT EXISTS tourist_detail (
+  touristid INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  firstname VARCHAR(45) NULL,
+  lastname VARCHAR(50) NULL,
+  username VARCHAR(50) NULL UNIQUE,
+  email VARCHAR(100) NULL,
+  contact VARCHAR(15) NULL,
+  dateofbirth DATETIME NULL,
+  age INT NULL,
+  country VARCHAR(45) NULL,
+  city VARCHAR(45) NULL,
+  password CHAR(10) NULL);
+
+INSERT INTO tourist_detail(firstname,lastname,username,email,contact,dateofbirth,age,country,city,password) VALUES
+  ("ASHABA","MICHAEL","MICHAEL12","michaelash@gmail.com","07067453677","1991-02-26",34,"UGANDA","MBARARA","MIDGHA"),
+  ("MUHUMUZA","GERALD","GERO","gerald@gmail.com","0789232518","2000-10-19",24,"UGANDA","KAMPALA","psgha");
+  
+
+CREATE TABLE IF NOT EXISTS flight (
+  flightid INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  flightname VARCHAR(45) NULL,
+  destiname VARCHAR(45) NULL,
+  departureplace VARCHAR(45) NULL,
+  departuretime DATE NULL,
+  arrivaldatetime DATE NULL,
+  price DECIMAL(2,2) NULL);
+
+INSERT INTO flight(flightname,destiname,departureplace,departuretime,arrivaldatetime,price) VALUES
+  ("Uganda airlines","Daresalam","Kampala","2024-01-23","2024-01-24",230.12);
+  
+
+CREATE TABLE IF NOT EXISTS booking (
+  bookingid INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  touristid INT NOT NULL,
+  bookeddate DATETIME NULL DEFAULT now(),
+  idRoom INT NOT NULL,
+  tourid INT NOT NULL,
+  flightid INT NOT NULL,
+  FOREIGN KEY(touristid) REFERENCES tourist_detail(touristid),
+  FOREIGN KEY(idRoom) REFERENCES Room(idRoom),
+  FOREIGN KEY(tourid) REFERENCES tour(tourid),
+  FOREIGN KEY(flightid) REFERENCES flight(flightid));
+
+INSERT INTO booking(touristid,idRoom,tourid,flightid) VALUES
+  (1,1,2,1),
+  (2,3,4,1);
+  
